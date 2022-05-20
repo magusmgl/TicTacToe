@@ -37,7 +37,7 @@ def check_yes_no_answer(answer: str) -> str:
     Задаем пользователя вопрос и
     валидируем чтобы он дал ответ "Да" или "Нет"
     :param answer: Вопрос для проверки
-    :return: Ожидаемы ответ: Да или Нет
+    :return: Ожидаемый ответ: Да или Нет
     """
     while True:
         res = input(answer).lower()
@@ -76,8 +76,7 @@ def make_move_for_player(player_sign: str, field: list, acceptable_moves: list) 
     """
     Заправшиваем и валидируем ход игрока
     :param player_sign: знак игрока
-    :param field: текущие состояние игрового поля
-    :param acceptable_moves: список допустимых ходов
+    :param field: текущие состояние игрового поля :param acceptable_moves: список допустимых ходов
     :return:
     """
     while True:
@@ -91,22 +90,18 @@ def make_move_for_player(player_sign: str, field: list, acceptable_moves: list) 
     print("Вы сделали свой ход!")
 
 
-def display_fields(current_field: list) -> None:
+def display_game_field(current_field: list) -> None:
     """
     Вывдит в консоль текущие игровое поле
     :param current_field: лист с текущим расположение знаков игроков
     :return:
     """
     print()
-    print("   0   1   2")
-    k = 0
-    for i in current_field:
-        print(k, end=" ")
-        for j in i:
-            print(j, end=" ")
-        k += 1
-        print()
-    print()
+    print("      0  |  1  |  2  |")
+    print("-" * 21)
+    for i, row in enumerate(current_field):
+        print(f" {str(i)} | {' | '.join(row)} |")
+        print("_" * 21)
 
 
 def checking_winnings(current_field: list, sign: str) -> bool:
@@ -192,7 +187,7 @@ if __name__ == '__main__':
 
     # Инициализируем  и выводим в консоль игровое поле
     init_filed = [[" - " for j in range(3)] for i in range(3)]
-    display_fields(init_filed)
+    display_game_field(init_filed)
 
     game_status = True
 
@@ -217,9 +212,8 @@ if __name__ == '__main__':
                 else:
                     move_selection_flag = 1
 
-            display_fields(init_filed)
+            display_game_field(init_filed)
 
         else:
             game_status = False
             print("Игра окончена! Ничья.")
-
