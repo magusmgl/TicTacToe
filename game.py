@@ -62,21 +62,7 @@ def choosing_first_move() -> tuple:
     return computer, player
 
 
-def check_type_input_cords(fn):
-    def wrapper(sign, field, acceptable_moves):
-        while True:
-            try:
-                res = fn(sign, field, acceptable_moves)
-                break
-            except BaseException:
-                print(f"Ошибка!")
-        return res
-
-    return wrapper
-
-
-@check_type_input_cords
-def make_move_for_player(player_sign: str, field: list, acceptable_moves: list) -> None:
+def make_move_for_player(sign: str, field: list, acceptable_moves: list) -> None:
     """
     Заправшиваем и валидируем ход игрока
     :param player_sign: знак игрока
@@ -84,13 +70,25 @@ def make_move_for_player(player_sign: str, field: list, acceptable_moves: list) 
     :return:
     """
     while True:
-        cords = tuple(map(int, input("Введите координаты клетки (два числа от 0 до 3 через пробел): ").split()))
-        if cords in acceptable_moves:
-            x, y = cords
-            break
-        print("Упс .. Некорректные координаты клетки.")
+        cords = (input("Введите координаты клетки (два числа от 0 до 3 через пробел): ").split())
 
-    field[x][y] = player_sign
+        if len(cords) != 2:
+            print("Введите два числа от 0 до 2 через пробел.")
+            continue
+
+        if not cords[0].isdigit() or not cords[1].isdigit():
+            print("Введенные значения не являются числами.")
+            continue
+
+        x, y = map(int, cords)
+        if not all([0 <= x <= 2, 0 <= y <= 2]):
+            print("Вы ввели неверные координаты клетки. Числа должны быть от 0 до 2.")
+            continue
+
+        if (x, y) in acceptable_moves:
+            field[x][y] = sign
+            break
+        print("Клетка уже занята.")
     print("Вы сделали свой ход!")
 
 
@@ -190,7 +188,8 @@ if __name__ == '__main__':
     move_selection_flag = 1 if player_sign == " X " else 0
 
     # Инициализируем  и выводим в консоль игровое поле
-    init_filed = [[" - " for j in range(3)] for i in range(3)]
+    # init_filed = [[" - " for j in range(3)] for i in range(3)]
+    init_filed = [[" - "] * 3 for i in range(3)]
     display_game_field(init_filed)
 
     game_status = True
